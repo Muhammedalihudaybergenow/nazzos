@@ -1,5 +1,78 @@
-version: '3.8'
+version: "3.8"
 services:
-  api-gateway:
+  broker:
+    build: .
+    restart: always
+    volumes:
+      - br:/usr/bin
+    env_file:
+      - .env
+    ports:
+      - ${RABBITMQ_PORT}:5672
+    networks:
+      - backend
+  api:
     build: ./api-gateway
-    context: 
+    restart: always
+    ports:
+      - ${API_PORT}:${API_PORT}
+    env_file:
+      - .env
+    volumes:
+      - ./api-gateway:/home/app/api-gateway
+      - /home/app/api-gateway/node_modules
+    depends_on:
+      - users
+      - broker
+    networks:
+      - backend
+  users:
+    build: ./users
+    restart: always
+    volumes:
+      - ./users:/home/app/users
+      - /home/app/users/node_modules
+    depends_on:
+      - user_db
+      - user_cache
+      - broker
+    networks:
+      - backend
+  user_cache:
+    image: redis:latest
+    restart: always
+    env_file:
+      - ./users/.env
+    ports:
+      - ${REDIS_PORT}:6379
+    volumes:
+      - u_cache:/usr/bin
+    depends_on:
+      - broker
+    networks:
+      - backend
+  user_db:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_USER=${TYPEORM_DATABASE_USERNAME}
+      - POSTGRES_PASSWORD=${TYPEORM_DATABASE_PASSWORD}
+      - POSTGRES_DB=${TYPEORM_DATABASE_NAME}
+    env_file:
+      - ./users/.env
+    ports:
+      - ${TYPEORM_DATABASE_PORT}:5432
+    volumes:
+      - u_db:/usr/bin
+    depends_on:
+      - broker
+    networks:
+      - backend
+
+volumes:
+  br: {}
+  u_db: {}
+  u_cache: {}
+networks:
+  backend:
+    driver: bridge

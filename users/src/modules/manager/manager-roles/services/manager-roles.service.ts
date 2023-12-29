@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateManagerRoleDto } from './dto/create-manager-role.dto';
-import { UpdateManagerRoleDto } from './dto/update-manager-role.dto';
+import { CreateManagerRoleDto } from '../dto/create-manager-role.dto';
+import { UpdateManagerRoleDto } from '../dto/update-manager-role.dto';
 
 @Injectable()
 export class ManagerRolesService {

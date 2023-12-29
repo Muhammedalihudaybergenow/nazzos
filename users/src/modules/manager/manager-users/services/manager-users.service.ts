@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateManagerUserDto } from './dto/create-manager-user.dto';
-import { UpdateManagerUserDto } from './dto/update-manager-user.dto';
+import { CreateManagerUserDto } from '../dto/create-manager-user.dto';
+import { UpdateManagerUserDto } from '../dto/update-manager-user.dto';
 
 @Injectable()
 export class ManagerUsersService {

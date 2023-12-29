@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ManagerUsersService } from './manager-users.service';
-import { ManagerUsersController } from './manager-users.controller';
+import { ManagerUsersService } from './services/manager-users.service';
+import { ManagerUsersController } from './controllers/manager-users.controller';
 
 @Module({
   controllers: [ManagerUsersController],

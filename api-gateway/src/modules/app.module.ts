@@ -9,7 +9,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['../.env'],
       validationSchema: Joi.object({
         RABBITMQ_HOST: Joi.string().required(),
         RABBITMQ_PORT: Joi.number().required(),

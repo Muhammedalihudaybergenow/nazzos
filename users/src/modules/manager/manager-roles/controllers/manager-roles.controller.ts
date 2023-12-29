@@ -1,7 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ManagerRolesService } from './manager-roles.service';
-import { CreateManagerRoleDto } from './dto/create-manager-role.dto';
-import { UpdateManagerRoleDto } from './dto/update-manager-role.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
+import { ManagerRolesService } from '../services/manager-roles.service';
+import { CreateManagerRoleDto } from '../dto/create-manager-role.dto';
+import { UpdateManagerRoleDto } from '../dto/update-manager-role.dto';
 
 @Controller('manager-roles')
 export class ManagerRolesController {
@@ -23,7 +31,10 @@ export class ManagerRolesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateManagerRoleDto: UpdateManagerRoleDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateManagerRoleDto: UpdateManagerRoleDto,
+  ) {
     return this.managerRolesService.update(+id, updateManagerRoleDto);
   }
 

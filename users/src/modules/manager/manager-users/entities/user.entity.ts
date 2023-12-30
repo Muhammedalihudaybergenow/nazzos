@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { RoleEntity } from 'src/modules/manager/manager-roles/entities';
 import { PermissionEntity } from 'src/modules/manager/manager-permissions/entities';
+import { LangEnum, UserStatusEnum } from 'src/common/enums';
 @Entity({
   name: 'users',
 })
@@ -34,10 +35,10 @@ export class UserEntity {
 
   @Column({
     name: 'lang',
-    type: 'varchar',
+    type: 'integer',
     nullable: false,
   })
-  lang: string;
+  lang: LangEnum;
 
   @Column({
     name: 'is_super_user',
@@ -46,9 +47,41 @@ export class UserEntity {
   })
   isSuperUser: boolean;
 
+  @Column({
+    name: 'password',
+    type: 'varchar',
+    nullable: false,
+  })
+  password: string;
+
+  @Column({
+    name: 'status',
+    type: 'integer',
+    nullable: false,
+  })
+  status: UserStatusEnum;
+
+  @Column({
+    name: 'created_at',
+    type: 'bigint',
+    nullable: false,
+  })
+  createdAt: number;
+
+  @Column({
+    name: 'login_at',
+    type: 'bigint',
+    nullable: false,
+  })
+  loginAt: number;
+
   @ManyToMany(() => RoleEntity, (roles) => roles.users)
   roles: RoleEntity[];
 
   @ManyToMany(() => PermissionEntity, (permissions) => permissions.users)
   permissions: PermissionEntity[];
+
+  constructor(entity?: Partial<UserEntity>) {
+    Object.assign(this, entity);
+  }
 }

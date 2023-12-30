@@ -31,7 +31,7 @@ export class RoleEntity {
   })
   slug: string;
 
-  @ManyToMany(() => PermissionEntity, (permissions) => permissions.id)
+  @ManyToMany(() => PermissionEntity, (permissions) => permissions.roles)
   @JoinTable({
     name: 'roles_permissions',
     joinColumn: {

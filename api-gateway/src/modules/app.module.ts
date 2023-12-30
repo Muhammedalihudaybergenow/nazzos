@@ -18,30 +18,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     AuthenticationsModule,
     ManagersModule,
     PublicsModule,
-    ClientsModule.registerAsync({
-      isGlobal: true,
-      clients: [
-        {
-          imports: [ConfigModule],
-          inject: [ConfigService],
-          name: process.env.RABBITMQ_USERS_QUEUE,
-          useFactory: async (configService: ConfigService) => {
-            return {
-              transport: Transport.RMQ,
-              options: {
-                noAck: false,
-                queue: configService.get('RABBITMQ_USERS_QUEUE'),
-                urls: [
-                  `amqp://${configService.get(
-                    'RABBITMQ_HOST',
-                  )}:${configService.get('RABBITMQ_PORT')}`,
-                ],
-              },
-            };
-          },
-        },
-      ],
-    }),
   ],
 })
 export class AppModule {}

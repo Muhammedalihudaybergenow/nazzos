@@ -1,26 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthenticationDto } from '../dto/create-authentication.dto';
-import { UpdateAuthenticationDto } from '../dto/update-authentication.dto';
-
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { LoginDto } from 'src/modules/authentications/dto';
 @Injectable()
 export class AuthenticationsService {
-  create(createAuthenticationDto: CreateAuthenticationDto) {
-    return 'This action adds a new authentication';
-  }
+  constructor(@Inject('AUTH_SERVICE') private client: ClientProxy) {}
 
-  findAll() {
-    return `This action returns all authentications`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} authentication`;
-  }
-
-  update(id: number, updateAuthenticationDto: UpdateAuthenticationDto) {
-    return `This action updates a #${id} authentication`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} authentication`;
+  login(dto: LoginDto) {
+    return this.client.emit({ cmd: 'login' }, dto);
   }
 }

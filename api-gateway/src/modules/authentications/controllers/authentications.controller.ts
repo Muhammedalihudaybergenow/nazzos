@@ -7,41 +7,21 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { AuthenticationsService } from '../services/authentications.service';
-import { CreateAuthenticationDto } from '../dto/create-authentication.dto';
-import { UpdateAuthenticationDto } from '../dto/update-authentication.dto';
-
-@Controller('authentications')
+import { AuthenticationsService } from 'src/modules/authentications/services';
+import { ApiTags } from '@nestjs/swagger';
+import { LoginDto } from 'src/modules/authentications/dto';
+@Controller({
+  path: 'authentications',
+  version: '1',
+})
+@ApiTags('Authentication Controller')
 export class AuthenticationsController {
   constructor(
     private readonly authenticationsService: AuthenticationsService,
   ) {}
 
-  @Post()
-  create(@Body() createAuthenticationDto: CreateAuthenticationDto) {
-    return this.authenticationsService.create(createAuthenticationDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.authenticationsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authenticationsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateAuthenticationDto: UpdateAuthenticationDto,
-  ) {
-    return this.authenticationsService.update(+id, updateAuthenticationDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authenticationsService.remove(+id);
+  @Post('login')
+  login(@Body() body: LoginDto) {
+    return this.authenticationsService.login(body);
   }
 }

@@ -86,7 +86,7 @@ export class PermissionSeeds implements Seeder {
         );
       }
     });
-    if (newPermissions.length) {
+    if (!newPermissions.length) {
       await permissionRepository.save(newPermissions);
     }
   }

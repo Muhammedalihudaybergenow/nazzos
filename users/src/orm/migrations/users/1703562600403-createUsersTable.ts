@@ -67,6 +67,12 @@ export class CreateUsersTable1703562600403 implements MigrationInterface {
           {
             columnNames: ['status'],
           },
+          {
+            columnNames: ['created_at'],
+          },
+          {
+            columnNames: ['login_at'],
+          },
         ],
       }),
       true,

@@ -10,14 +10,15 @@ import {
 import { AuthenticationsService } from '../services/authentications.service';
 import { CreateAuthenticationDto } from '../dto/create-authentication.dto';
 import { UpdateAuthenticationDto } from '../dto/update-authentication.dto';
+import { MessagePattern } from '@nestjs/microservices';
 
-@Controller('authentications')
+@Controller()
 export class AuthenticationsController {
   constructor(
     private readonly authenticationsService: AuthenticationsService,
   ) {}
 
-  @Post()
+  @MessagePattern({ cmd: 'login' })
   create(@Body() createAuthenticationDto: CreateAuthenticationDto) {
     return this.authenticationsService.create(createAuthenticationDto);
   }

@@ -10,6 +10,7 @@ async function bootstrap() {
       transport: Transport.RMQ,
       options: {
         queue: process.env.RABBITMQ_AUTHS_QUEUE,
+        noAck: false,
         urls: [
           `amqp://${process.env.RABBITMQ_HOST}:${process.env.RABBITMQ_PORT}`,
         ],

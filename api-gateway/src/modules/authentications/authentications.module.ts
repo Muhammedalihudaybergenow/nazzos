@@ -1,36 +1,46 @@
 import { Module } from '@nestjs/common';
-import { AuthenticationsService } from './services/authentications.service';
+import {
+  AuthenticationsService,
+  OtpService,
+  TokenService,
+} from 'src/modules/authentications/services';
 import { AuthenticationsController } from './controllers/authentications.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { PermissionEntity, RoleEntity, UserEntity } from './entities';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { UserRepository } from 'src/modules/authentications/repositories';
+import { JwtStrategy } from 'src/modules/authentications/strategies';
+import { RedisModule } from '../redis/redis.module';
+import { SqlCacheService } from 'src/modules/redis/services';
 
 @Module({
   controllers: [AuthenticationsController],
-  providers: [AuthenticationsService],
   imports: [
-    ClientsModule.registerAsync({
-      clients: [
-        {
-          imports: [ConfigModule],
-          inject: [ConfigService],
-          name: 'AUTH_SERVICE',
-          useFactory: async (configService: ConfigService) => {
-            return {
-              transport: Transport.RMQ,
-              options: {
-                noAck: true,
-                queue: configService.get('RABBITMQ_AUTHS_QUEUE'),
-                urls: [
-                  `amqp://${configService.get(
-                    'RABBITMQ_HOST',
-                  )}:${configService.get('RABBITMQ_PORT')}`,
-                ],
-              },
-            };
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (config: ConfigService) => {
+        return {
+          secretOrPrivateKey: config.get<string>('JWT_SECRET'),
+          signOptions: {
+            expiresIn: config.get('JWT_ACCESS_EXPIRES_IN'),
           },
-        },
-      ],
+        };
+      },
     }),
+    TypeOrmModule.forFeature([PermissionEntity, RoleEntity, UserEntity]),
+    RedisModule,
+  ],
+  providers: [
+    AuthenticationsService,
+    UserRepository,
+    JwtService,
+    ConfigService,
+    TokenService,
+    JwtStrategy,
+    SqlCacheService,
+    OtpService,
   ],
 })
 export class AuthenticationsModule {}

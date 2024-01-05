@@ -24,27 +24,15 @@ services:
     depends_on:
       - users
       - broker
-      - auths
     networks:
       - backend
-  auths:
-    build: ./authentications
-    restart: always
-    volumes:
-      - ./authentications:/home/app/authentications
-      - ./authentications/node_modules:/home/app/authentications/node_modules
-    depends_on:
-      - user_db
-      - user_cache
-    networks:
-      - backend
-  auth_cache:
+  api_cache:
     image: redis:latest
     restart: always
     ports:
-      - ${AUTH_REDIS_PORT}:6379
+      - ${API_REDIS_PORT}:6379
     volumes:
-      - a_cache:/usr/bin
+      - api_cache:/usr/bin
     env_file:
       - .env
     networks:
@@ -96,7 +84,7 @@ volumes:
   br: {}
   u_db: {}
   u_cache: {}
-  a_cache: {}
+  api_cache: {}
 networks:
   backend:
     driver: bridge

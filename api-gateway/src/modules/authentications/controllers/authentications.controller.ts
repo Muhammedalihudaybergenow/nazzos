@@ -1,15 +1,7 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { AuthenticationsService } from 'src/modules/authentications/services';
 import { ApiTags } from '@nestjs/swagger';
-import { LoginDto } from 'src/modules/authentications/dto';
+import { LoginDto, RegistrationDto } from 'src/modules/authentications/dto';
 @Controller({
   path: 'authentications',
   version: '1',
@@ -24,4 +16,7 @@ export class AuthenticationsController {
   login(@Body() body: LoginDto) {
     return this.authenticationsService.login(body);
   }
+
+  @Post()
+  registration(@Body() body: RegistrationDto) {}
 }

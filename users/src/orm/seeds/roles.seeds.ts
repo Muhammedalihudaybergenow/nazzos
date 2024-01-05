@@ -15,7 +15,7 @@ export class RoleSeeds implements Seeder {
     const roleRepository = dataSource.getRepository(RoleEntity);
     const roles = await roleRepository
       .createQueryBuilder('role')
-      .where('role.slug IN (:...slugs)', {
+      .where('role.slug IN (:slugs)', {
         slugs: roleSeeds.map((roleSeed) => roleSeed.slug),
       })
       .getMany();
@@ -32,8 +32,8 @@ export class RoleSeeds implements Seeder {
         );
       }
     });
-    if (!newRoleEntities.length) {
-      await roleRepository.save(newRoleEntities);
+    if (newRoleEntities.length) {
+      const roles = await roleRepository.save(newRoleEntities);
     }
   }
 }

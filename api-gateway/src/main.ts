@@ -3,6 +3,7 @@ import { AppModule } from './modules/app.module';
 import { VersioningType, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule } from '@nestjs/swagger';
 import { SwaggerConfiguration } from 'src/common/swagger';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');

@@ -13,10 +13,10 @@ export class OtpService {
   public async sendOtp(phonenumber: number) {
     const checkOtp = await this.getOtp(phonenumber);
     if (!checkOtp) {
-      const random = Math.floor(Math.random() * 10000);
+      // const random = Math.floor(Math.random() * 10000);
       await this.cacheManager.set(
         `otp-${phonenumber}`,
-        random,
+        1234,
         this.configService.get(`OPT_TTL`),
       );
     }

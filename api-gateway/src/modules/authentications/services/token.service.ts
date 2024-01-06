@@ -13,17 +13,13 @@ export class TokenService {
   ) {}
 
   async generateAccessToken(payload: JwtPayload) {
-    try {
-      return {
-        token: await this.jwtService.signAsync(payload, {
-          secret: this.configService.get('JWT_SECRET'),
-          expiresIn: this.configService.get('JWT_ACCESS_EXPIRES_IN'),
-        }),
+    return {
+      token: await this.jwtService.signAsync(payload, {
+        secret: this.configService.get('JWT_SECRET'),
         expiresIn: this.configService.get('JWT_ACCESS_EXPIRES_IN'),
-      };
-    } catch (error) {
-      console.log(error);
-    }
+      }),
+      expiresIn: this.configService.get('JWT_ACCESS_EXPIRES_IN'),
+    };
   }
 
   async generateRefreshToken(payload: JwtPayload) {

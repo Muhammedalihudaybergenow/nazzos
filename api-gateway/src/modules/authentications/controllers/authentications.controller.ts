@@ -1,7 +1,11 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { AuthenticationsService } from 'src/modules/authentications/services';
 import { ApiTags } from '@nestjs/swagger';
-import { LoginDto, RegistrationDto } from 'src/modules/authentications/dto';
+import {
+  LoginDto,
+  OtpDto,
+  RegistrationDto,
+} from 'src/modules/authentications/dto';
 @Controller({
   path: 'authentications',
   version: '1',
@@ -17,6 +21,13 @@ export class AuthenticationsController {
     return this.authenticationsService.login(body);
   }
 
-  @Post()
-  registration(@Body() body: RegistrationDto) {}
+  @Post('registration')
+  registration(@Body() body: RegistrationDto) {
+    return this.authenticationsService.registration(body);
+  }
+
+  @Post('otp')
+  sendOtp(@Body() body: OtpDto) {
+    return this.authenticationsService.sendOtp(body.phonenumber);
+  }
 }

@@ -16,6 +16,7 @@ import { HashHelper } from 'src/common/helpers';
 import { TokenService } from './token.service';
 import { OtpService } from './otp.service';
 import { UserEntity } from 'src/modules/authentications/entities';
+
 @Injectable()
 export class AuthenticationsService {
   constructor(
@@ -80,4 +81,6 @@ export class AuthenticationsService {
     await this.otpService.sendOtp(phonenumber);
     return 'Success';
   }
+
+  async validateToken() {}
 }

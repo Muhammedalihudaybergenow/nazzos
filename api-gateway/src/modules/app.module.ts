@@ -10,6 +10,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CacheModule } from '@nestjs/cache-manager';
 import { RedisClientOptions } from 'redis';
 import { RedisModule } from './redis/redis.module';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Global()
 @Module({
@@ -50,6 +51,30 @@ import { RedisModule } from './redis/redis.module';
       },
     }),
     RedisModule,
+    ClientsModule.registerAsync({
+      isGlobal: true,
+      clients: [
+        {
+          imports: [ConfigModule],
+          inject: [ConfigService],
+          name: 'TOKEN_SERVICE',
+          useFactory: async (config: ConfigService) => {
+            return {
+              transport: Transport.RMQ,
+              options: {
+                noAck: true,
+                queue: config.get('RABBITMQ_TOKENS_QUEUE'),
+                urls: [
+                  `amqp://${config.get<string>(
+                    'RABBITMQ_HOST',
+                  )}:${config.get<number>('RABBITMQ_PORT')}`,
+                ],
+              },
+            };
+          },
+        },
+      ],
+    }),
   ],
   providers: [
     {

@@ -13,6 +13,7 @@ import { UserRepository } from 'src/modules/authentications/repositories';
 import { JwtStrategy } from 'src/modules/authentications/strategies';
 import { RedisModule } from '../redis/redis.module';
 import { SqlCacheService } from 'src/modules/redis/services';
+import { Client, ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   controllers: [AuthenticationsController],

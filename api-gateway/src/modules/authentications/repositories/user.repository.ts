@@ -7,7 +7,7 @@ import { SqlCacheService } from 'src/modules/redis/services';
 export class UserRepository extends Repository<UserEntity> {
   constructor(
     private dataSource: DataSource,
-    private sqlCacheService: SqlCacheService,
+    private sqlCacheService: SqlCacheService<UserEntity>,
   ) {
     super(UserEntity, dataSource.createEntityManager());
   }
@@ -28,5 +28,9 @@ export class UserRepository extends Repository<UserEntity> {
       .leftJoinAndSelect('user.permissions', 'userPermissions')
       .where('user.id=:userId', { userId: id });
     return this.sqlCacheService.getOne(query);
+  }
+  async updateLoginAt(user: UserEntity) {
+    user.loginAt = new Date().getTime();
+    return this.save(user);
   }
 }

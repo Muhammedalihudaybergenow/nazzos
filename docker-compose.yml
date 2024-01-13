@@ -22,8 +22,9 @@ services:
     env_file:
       - .env
     depends_on:
-      - users
+      # - users
       - broker
+      - token
     networks:
       - backend
   api_cache:
@@ -37,18 +38,18 @@ services:
       - .env
     networks:
       - backend
-  users:
-    build: ./users
-    restart: always
-    volumes:
-      - ./users:/home/app/users
-      - ./users/node_modules:/home/app/users/node_modules
-    depends_on:
-      - user_db
-      - user_cache
-      - broker
-    networks:
-      - backend
+  # users:
+  #   build: ./users
+  #   restart: always
+  #   volumes:
+  #     - ./users:/home/app/users
+  #     - ./users/node_modules:/home/app/users/node_modules
+  #   depends_on:
+  #     - user_db
+  #     - user_cache
+  #     - broker
+  #   networks:
+  #     - backend
   user_cache:
     image: redis:latest
     restart: always
@@ -79,11 +80,39 @@ services:
       - broker
     networks:
       - backend
-
+  token:
+    build: ./tokens
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./tokens:/home/app/tokens
+      - ./tokens/node_modules:/home/app/tokens/node_modules
+    depends_on:
+      - token_db
+      - broker
+    networks:
+      - backend
+  token_db:
+    image: bitnami/mongodb:latest
+    restart: always
+    environment:
+      - MONGODB_ROOT_USER=${TOKEN_DB_USERNAME}
+      - MONGODB_DATABASE=${TOKEN_DB_NAME}
+      - MONGODB_ROOT_PASSWORD=${TOKEN_DB_PASSWORD}
+    ports:
+      - ${TOKEN_DB_PORT}:27017
+    env_file:
+      - .env
+    volumes:
+      - t_db:/usr/bin
+    networks:
+      - backend
 volumes:
   br: {}
   u_db: {}
   u_cache: {}
+  t_db: {}
   api_cache: {}
 networks:
   backend:

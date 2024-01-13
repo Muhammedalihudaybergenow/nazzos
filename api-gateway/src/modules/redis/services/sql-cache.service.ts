@@ -5,17 +5,17 @@ import { Cache } from 'cache-manager';
 import { SelectQueryBuilder } from 'typeorm';
 
 @Injectable()
-export class SqlCacheService {
+export class SqlCacheService<T> {
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private configService: ConfigService,
   ) {}
 
   private sqlCacheCheck(query: SelectQueryBuilder<any>) {
-    return this.cacheManager.get(query.getSql());
+    return this.cacheManager.get<any>(query.getSql());
   }
 
-  private async sqlSetCache(query: SelectQueryBuilder<any>, result: any) {
+  private async sqlSetCache(query: SelectQueryBuilder<T>, result: any) {
     await this.cacheManager.set(
       query.getSql(),
       result,
@@ -24,16 +24,15 @@ export class SqlCacheService {
     return result;
   }
 
-  public async getOne(query: SelectQueryBuilder<any>) {
+  public async getOne(query: SelectQueryBuilder<T>): Promise<T> {
     const cacheCheck = await this.sqlCacheCheck(query);
-    console.log(cacheCheck);
     if (!cacheCheck) {
       return this.sqlSetCache(query, await query.getOne());
     }
     return cacheCheck;
   }
 
-  public async getMany(query: SelectQueryBuilder<any>) {
+  public async getMany(query: SelectQueryBuilder<T>): Promise<T[]> {
     const cacheCheck = await this.sqlCacheCheck(query);
     if (!cacheCheck) {
       return this.sqlSetCache(query, await query.getMany());

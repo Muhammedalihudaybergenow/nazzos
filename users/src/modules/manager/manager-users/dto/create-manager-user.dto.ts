@@ -7,4 +7,6 @@ export class CreateManagerUserDto {
   phonenumber: number;
   password: string;
   lang: LangEnum;
+  roleIds: number[];
+  permissionIds: number[];
 }

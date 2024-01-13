@@ -9,9 +9,10 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserRepository } from 'src/modules/authentications/repositories';
 import { JwtPayload } from 'src/modules/authentications/interfaces';
+import { JWT_CONSTANT } from 'src/common/constants';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwtStrategy extends PassportStrategy(Strategy, JWT_CONSTANT) {
   constructor(
     private configService: ConfigService,
     private userRepository: UserRepository,

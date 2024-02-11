@@ -3,15 +3,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthenticationsModule } from './authentications/authentications.module';
 import { ManagersModule } from './managers/managers.module';
 import { PublicsModule } from './publics/public.module';
+import { UserClientsModule } from './clients/clients.module';
 import * as Joi from 'joi';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AppResponseInterceptor } from 'src/common/interceptors';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CacheModule } from '@nestjs/cache-manager';
-import { RedisClientOptions } from 'redis';
 import { RedisModule } from './redis/redis.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-
 @Global()
 @Module({
   imports: [
@@ -34,6 +32,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     AuthenticationsModule,
     ManagersModule,
     PublicsModule,
+    UserClientsModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

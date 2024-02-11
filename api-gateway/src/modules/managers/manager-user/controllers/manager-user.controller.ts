@@ -7,11 +7,18 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { ManagerUserService } from '../services/manager-user.service';
-import { CreateManagerUserDto } from '../dto/create-manager-user.dto';
-import { UpdateManagerUserDto } from '../dto/update-manager-user.dto';
+import { ManagerUserService } from 'src/modules/managers/manager-user/services';
+import {
+  CreateManagerUserDto,
+  UpdateManagerUserDto,
+} from 'src/modules/managers/manager-user/dto';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('manager-user')
+@Controller({
+  path: 'manager/users',
+  version: '1',
+})
+@ApiTags('Manager User Controller')
 export class ManagerUserController {
   constructor(private readonly managerUserService: ManagerUserService) {}
 

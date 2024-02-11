@@ -7,11 +7,18 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { ManagerRolesService } from '../services/manager-roles.service';
-import { CreateManagerRoleDto } from '../dto/create-manager-role.dto';
-import { UpdateManagerRoleDto } from '../dto/update-manager-role.dto';
+import { ManagerRolesService } from 'src/modules/managers/manager-roles/services';
+import {
+  CreateManagerRoleDto,
+  UpdateManagerRoleDto,
+} from 'src/modules/managers/manager-roles/dto';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('manager-roles')
+@Controller({
+  path: 'manager/roles',
+  version: '1',
+})
+@ApiTags('Manager Roles Controller')
 export class ManagerRolesController {
   constructor(private readonly managerRolesService: ManagerRolesService) {}
 

@@ -22,7 +22,7 @@ services:
     env_file:
       - .env
     depends_on:
-      # - users
+      - users
       - broker
       - token
     networks:
@@ -38,18 +38,18 @@ services:
       - .env
     networks:
       - backend
-  # users:
-  #   build: ./users
-  #   restart: always
-  #   volumes:
-  #     - ./users:/home/app/users
-  #     - ./users/node_modules:/home/app/users/node_modules
-  #   depends_on:
-  #     - user_db
-  #     - user_cache
-  #     - broker
-  #   networks:
-  #     - backend
+  users:
+    build: ./users
+    restart: always
+    volumes:
+      - ./users:/home/app/users
+      - ./users/node_modules:/home/app/users/node_modules
+    depends_on:
+      - user_db
+      - user_cache
+      - broker
+    networks:
+      - backend
   user_cache:
     image: redis:latest
     restart: always

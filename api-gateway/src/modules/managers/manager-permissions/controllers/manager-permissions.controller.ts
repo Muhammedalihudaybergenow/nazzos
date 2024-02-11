@@ -7,13 +7,12 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { ManagerPermissionsService } from 'src/modules/manager/manager-permissions/services';
+import { ApiTags } from '@nestjs/swagger';
+import { ManagerPermissionsService } from 'src/modules/managers/manager-permissions/services';
 import {
   CreateManagerPermissionDto,
   UpdateManagerPermissionDto,
-} from 'src/modules/manager/manager-permissions/dto';
-import { ApiTags } from '@nestjs/swagger';
-
+} from 'src/modules/managers/manager-permissions/dto';
 @Controller({
   path: 'manager/permissions',
   version: '1',

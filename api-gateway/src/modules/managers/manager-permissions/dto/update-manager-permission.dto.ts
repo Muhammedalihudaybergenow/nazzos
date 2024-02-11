@@ -1,4 +1,6 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { PartialType } from '@nestjs/swagger';
 import { CreateManagerPermissionDto } from './create-manager-permission.dto';
 
-export class UpdateManagerPermissionDto extends PartialType(CreateManagerPermissionDto) {}
+export class UpdateManagerPermissionDto extends PartialType(
+  CreateManagerPermissionDto,
+) {}

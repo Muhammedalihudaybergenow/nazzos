@@ -1,9 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { CreateManagerPermissionDto } from '../dto/create-manager-permission.dto';
-import { UpdateManagerPermissionDto } from '../dto/update-manager-permission.dto';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import {
+  CreateManagerPermissionDto,
+  UpdateManagerPermissionDto,
+} from 'src/modules/manager/manager-permissions/dto';
 
 @Injectable()
 export class ManagerPermissionsService {
+  constructor(@Inject('USERS_SERVICE') private usersClientProxy: ClientProxy) {}
   create(createManagerPermissionDto: CreateManagerPermissionDto) {
     return 'This action adds a new managerPermission';
   }

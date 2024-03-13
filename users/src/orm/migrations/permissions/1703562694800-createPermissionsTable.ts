@@ -21,6 +21,7 @@ export class CreatePermissionsTable1703562694800 implements MigrationInterface {
             type: 'varchar',
             length: '100',
             isNullable: false,
+            isUnique: true,
           },
         ],
         indices: [

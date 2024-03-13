@@ -1,26 +1,39 @@
-import { Injectable } from '@nestjs/common';
-import { CreateManagerRoleDto } from '../dto/create-manager-role.dto';
-import { UpdateManagerRoleDto } from '../dto/update-manager-role.dto';
-
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import {
+  CreateManagerRoleDto,
+  UpdateManagerRoleDto,
+  ManagerRoleQueryDto,
+} from 'src/modules/managers/manager-roles/dto';
 @Injectable()
 export class ManagerRolesService {
+  constructor(@Inject('USERS_SERVICE') private client: ClientProxy) {}
   create(createManagerRoleDto: CreateManagerRoleDto) {
-    return 'This action adds a new managerRole';
+    return this.client.send(
+      { cmd: 'manager-role-create' },
+      createManagerRoleDto,
+    );
   }
 
-  findAll() {
-    return `This action returns all managerRoles`;
+  findAll(managerRoleQueryDto: ManagerRoleQueryDto) {
+    return this.client.send(
+      { cmd: 'manager-role-findall' },
+      managerRoleQueryDto,
+    );
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} managerRole`;
+    return this.client.send({ cmd: 'manager-role-findone' }, { id });
   }
 
   update(id: number, updateManagerRoleDto: UpdateManagerRoleDto) {
-    return `This action updates a #${id} managerRole`;
+    return this.client.send(
+      { cmd: 'manager-role-update' },
+      { ...updateManagerRoleDto, id },
+    );
   }
 
   remove(id: number) {
-    return `This action removes a #${id} managerRole`;
+    return this.client.send({ cmd: 'manager-role-remove' }, { id });
   }
 }

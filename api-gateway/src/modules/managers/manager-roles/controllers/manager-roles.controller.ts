@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ManagerRolesService } from 'src/modules/managers/manager-roles/services';
 import {
   CreateManagerRoleDto,
   UpdateManagerRoleDto,
+  ManagerRoleQueryDto,
 } from 'src/modules/managers/manager-roles/dto';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -28,8 +30,8 @@ export class ManagerRolesController {
   }
 
   @Get()
-  findAll() {
-    return this.managerRolesService.findAll();
+  findAll(@Query() query: ManagerRoleQueryDto) {
+    return this.managerRolesService.findAll(query);
   }
 
   @Get(':id')

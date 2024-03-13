@@ -1,11 +1,17 @@
-import { Injectable } from '@nestjs/common';
-import { CreateManagerUserDto } from '../dto/create-manager-user.dto';
-import { UpdateManagerUserDto } from '../dto/update-manager-user.dto';
-
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import {
+  CreateManagerUserDto,
+  UpdateManagerUserDto,
+} from 'src/modules/managers/manager-user/dto';
 @Injectable()
 export class ManagerUserService {
+  constructor(@Inject('USERS_SERVICE') private client: ClientProxy) {}
   create(createManagerUserDto: CreateManagerUserDto) {
-    return 'This action adds a new managerUser';
+    return this.client.send(
+      { cmd: 'manager-user-create' },
+      createManagerUserDto,
+    );
   }
 
   findAll() {
@@ -17,10 +23,13 @@ export class ManagerUserService {
   }
 
   update(id: number, updateManagerUserDto: UpdateManagerUserDto) {
-    return `This action updates a #${id} managerUser`;
+    return this.client.send(
+      { cmd: 'manager-user-update' },
+      { id, ...updateManagerUserDto },
+    );
   }
 
   remove(id: number) {
-    return `This action removes a #${id} managerUser`;
+    return this.client.send({ cmd: 'manager-user-remove' }, { id });
   }
 }

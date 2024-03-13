@@ -4,13 +4,14 @@ import { ManagerRolesModule } from './manager-roles/manager-roles.module';
 import { ManagerPermissionsModule } from './manager-permissions/manager-permissions.module';
 import { ClientProxy, ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ManagerFilesModule } from './manager-files/manager-files.module';
 @Module({
   imports: [
     ManagerUserModule,
     ManagerRolesModule,
     ManagerPermissionsModule,
     ClientsModule.registerAsync({
-      isGlobal: false,
+      isGlobal: true,
       clients: [
         {
           imports: [ConfigModule],
@@ -33,6 +34,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         },
       ],
     }),
+    ManagerFilesModule,
   ],
 })
 export class ManagersModule {}

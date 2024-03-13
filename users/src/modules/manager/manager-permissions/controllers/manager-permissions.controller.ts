@@ -10,47 +10,39 @@ import {
 import { ManagerPermissionsService } from 'src/modules/manager/manager-permissions/services';
 import {
   CreateManagerPermissionDto,
+  ManagerPermissionQueryDto,
   UpdateManagerPermissionDto,
 } from 'src/modules/manager/manager-permissions/dto';
-import { ApiTags } from '@nestjs/swagger';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller({
-  path: 'manager/permissions',
-  version: '1',
-})
-@ApiTags('Manager Permissions Controller')
+@Controller()
 export class ManagerPermissionsController {
   constructor(
     private readonly managerPermissionsService: ManagerPermissionsService,
   ) {}
 
-  @Post()
-  create(@Body() createManagerPermissionDto: CreateManagerPermissionDto) {
+  @MessagePattern({ cmd: 'manager-permission-create' })
+  create(@Payload() createManagerPermissionDto: CreateManagerPermissionDto) {
     return this.managerPermissionsService.create(createManagerPermissionDto);
   }
 
-  @Get()
-  findAll() {
-    return this.managerPermissionsService.findAll();
+  @MessagePattern({ cmd: 'manager-permission-findall' })
+  findAll(@Payload() managerPermissionQueryDto: ManagerPermissionQueryDto) {
+    return this.managerPermissionsService.findAll(managerPermissionQueryDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @MessagePattern({ cmd: 'manager-permission-findone' })
+  findOne(@Payload('id') id: string) {
     return this.managerPermissionsService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateManagerPermissionDto: UpdateManagerPermissionDto,
-  ) {
-    return this.managerPermissionsService.update(
-      +id,
-      updateManagerPermissionDto,
-    );
+  @MessagePattern({ cmd: 'manager-permission-update' })
+  update(@Body() updateManagerPermissionDto: UpdateManagerPermissionDto) {
+    return this.managerPermissionsService.update(updateManagerPermissionDto);
   }
 
   @Delete(':id')
+  @MessagePattern({ cmd: 'manager-permission-remove' })
   remove(@Param('id') id: string) {
     return this.managerPermissionsService.remove(+id);
   }

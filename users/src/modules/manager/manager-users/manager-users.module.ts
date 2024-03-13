@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
-import { ManagerUsersService } from './services/manager-users.service';
-import { ManagerUsersController } from './controllers/manager-users.controller';
-
+import { ManagerUsersService } from 'src/modules/manager/manager-users/services';
+import { ManagerUsersController } from 'src/modules/manager/manager-users/controllers';
+import { UserEntity } from 'src/modules/manager/manager-users/entities';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ManagerUserRepository } from 'src/modules/manager/manager-users/repositories';
 @Module({
+  imports: [TypeOrmModule.forFeature([UserEntity])],
   controllers: [ManagerUsersController],
-  providers: [ManagerUsersService],
+  providers: [ManagerUsersService, ManagerUserRepository],
 })
 export class ManagerUsersModule {}

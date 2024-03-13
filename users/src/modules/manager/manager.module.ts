@@ -4,6 +4,6 @@ import { ManagerRolesModule } from './manager-roles/manager-roles.module';
 import { ManagerPermissionsModule } from './manager-permissions/manager-permissions.module';
 
 @Module({
-  imports: [ManagerUsersModule, ManagerRolesModule, ManagerPermissionsModule]
+  imports: [ManagerUsersModule, ManagerRolesModule, ManagerPermissionsModule],
 })
 export class ManagerModule {}

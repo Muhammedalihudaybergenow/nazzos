@@ -1,44 +1,37 @@
+import { Controller, Param } from '@nestjs/common';
 import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
-import { ManagerRolesService } from '../services/manager-roles.service';
-import { CreateManagerRoleDto } from '../dto/create-manager-role.dto';
-import { UpdateManagerRoleDto } from '../dto/update-manager-role.dto';
+  CreateManagerRoleDto,
+  UpdateManagerRoleDto,
+  ManagerRoleQueryDto,
+} from 'src/modules/manager/manager-roles/dto';
+import { ManagerRolesService } from 'src/modules/manager/manager-roles/services';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller('manager-roles')
+@Controller()
 export class ManagerRolesController {
   constructor(private readonly managerRolesService: ManagerRolesService) {}
 
-  @Post()
-  create(@Body() createManagerRoleDto: CreateManagerRoleDto) {
+  @MessagePattern({ cmd: 'manager-role-create' })
+  create(@Payload() createManagerRoleDto: CreateManagerRoleDto) {
     return this.managerRolesService.create(createManagerRoleDto);
   }
 
-  @Get()
-  findAll() {
-    return this.managerRolesService.findAll();
+  @MessagePattern({ cmd: 'manager-role-findall' })
+  findAll(@Payload() managerRoleQueryDto: ManagerRoleQueryDto) {
+    return this.managerRolesService.findAll(managerRoleQueryDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @MessagePattern({ cmd: 'manager-role-findone' })
+  findOne(@Payload('id') id: string) {
     return this.managerRolesService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateManagerRoleDto: UpdateManagerRoleDto,
-  ) {
-    return this.managerRolesService.update(+id, updateManagerRoleDto);
+  @MessagePattern({ cmd: 'manager-role-update' })
+  update(@Payload() payload: UpdateManagerRoleDto) {
+    return this.managerRolesService.update(payload);
   }
 
-  @Delete(':id')
+  @MessagePattern({ cmd: 'manager-role-remove' })
   remove(@Param('id') id: string) {
     return this.managerRolesService.remove(+id);
   }

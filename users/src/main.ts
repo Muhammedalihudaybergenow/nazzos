@@ -13,6 +13,8 @@ async function bootstrap() {
         urls: [
           `amqp://${process.env.RABBITMQ_HOST}:${process.env.RABBITMQ_PORT}`,
         ],
+        queue: process.env.RABBITMQ_QUEUE,
+        noAck: true,
       },
     },
   );

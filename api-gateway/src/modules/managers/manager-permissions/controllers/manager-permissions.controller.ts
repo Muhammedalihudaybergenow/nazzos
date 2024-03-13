@@ -6,12 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ManagerPermissionsService } from 'src/modules/managers/manager-permissions/services';
 import {
   CreateManagerPermissionDto,
   UpdateManagerPermissionDto,
+  ManagerPermissionQueryDto,
 } from 'src/modules/managers/manager-permissions/dto';
 @Controller({
   path: 'manager/permissions',
@@ -29,8 +31,8 @@ export class ManagerPermissionsController {
   }
 
   @Get()
-  findAll() {
-    return this.managerPermissionsService.findAll();
+  findAll(@Query() query: ManagerPermissionQueryDto) {
+    return this.managerPermissionsService.findAll(query);
   }
 
   @Get(':id')

@@ -33,7 +33,7 @@ import * as Joi from 'joi';
           password: configService.get('TYPEORM_DATABASE_PASSWORD'),
           port: parseInt(configService.get('TYPEORM_DATABASE_PORT')),
           database: configService.get('TYPEORM_DATABASE_NAME'),
-          entities: ['dist/modules/**/*entity.{js,ts}}'],
+          entities: ['dist/modules/**/*entity.{js,ts}'],
         };
       },
     }),

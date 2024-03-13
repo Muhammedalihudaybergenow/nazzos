@@ -7,39 +7,40 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { ManagerUsersService } from '../services/manager-users.service';
-import { CreateManagerUserDto } from '../dto/create-manager-user.dto';
-import { UpdateManagerUserDto } from '../dto/update-manager-user.dto';
+import { ManagerUsersService } from 'src/modules/manager/manager-users/services';
+import {
+  CreateManagerUserDto,
+  UpdateManagerUserDto,
+  ManagerUserQueryDto,
+} from 'src/modules/manager/manager-users/dto';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller('manager-users')
+@Controller()
 export class ManagerUsersController {
   constructor(private readonly managerUsersService: ManagerUsersService) {}
 
-  @Post()
+  @MessagePattern({ cmd: 'manager-user-create' })
   create(@Body() createManagerUserDto: CreateManagerUserDto) {
     return this.managerUsersService.create(createManagerUserDto);
   }
 
-  @Get()
-  findAll() {
-    return this.managerUsersService.findAll();
+  @MessagePattern({ cmd: 'manager-user-findall' })
+  findAll(@Payload() payload: ManagerUserQueryDto) {
+    return this.managerUsersService.findAll(payload);
   }
 
-  @Get(':id')
+  @MessagePattern({ cmd: 'manager-user-findone' })
   findOne(@Param('id') id: string) {
     return this.managerUsersService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateManagerUserDto: UpdateManagerUserDto,
-  ) {
-    return this.managerUsersService.update(+id, updateManagerUserDto);
+  @MessagePattern({ cmd: 'manager-user-update' })
+  update(@Payload() payload: UpdateManagerUserDto) {
+    return this.managerUsersService.update(payload);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @MessagePattern({ cmd: 'manager-user-remove' })
+  remove(@Payload('id') id: string) {
     return this.managerUsersService.remove(+id);
   }
 }

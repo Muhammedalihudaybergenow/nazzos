@@ -108,12 +108,52 @@ services:
       - t_db:/usr/bin
     networks:
       - backend
+  file:
+    build: ./files
+    restart: always
+    volumes:
+      - ./files:/home/app/files
+      - ./files/node_modules:/home/app/files/node_modules
+    env_file:
+      - .env
+    ports:
+      - ${FILE_PORT}:4000
+    depends_on:
+      - file_db
+      - users
+      - file_broker
+  file_db:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_USER=${FILE_DB_USERNAME}
+      - POSTGRES_PASSWORD=${FILE_DB_PASSWORD}
+      - POSTGRES_DB=${FILE_DB_NAME}
+    ports:
+      - ${FILE_DB_PORT}:5432
+    volumes:
+      - f_db:/usr/bin
+    networks:
+      - backend
+  file_broker:
+    image: rabbitmq:latest
+    restart: always
+    volumes:
+      - f_br:/usr/bin
+    ports:
+      - ${FILE_RABBITMQ_PORT}:5672
+    env_file:
+      - .env
+    networks:
+      - backend
 volumes:
   br: {}
   u_db: {}
   u_cache: {}
   t_db: {}
   api_cache: {}
+  f_db: {}
+  f_br: {}
 networks:
   backend:
     driver: bridge
